@@ -38,3 +38,27 @@ We will be using Nix for this. For example, `nix run nixpkgs#cargo init foo-bar`
    ```
    aeneas/tests/lean/Betree/Funs.lean
    ```
+
+## Running Charon
+
+After invoking the Nix shell with `nix-shell`,
+
+```
+alias charon = '../../../charon/bin/charon'
+cd tests/src/betree
+charon --polonius --opaque=betree_utils
+```
+
+Can see the `charon` options in `aeneas/tests/src/betree/aeneas-test-options` under `charon-args`.
+
+## Running Aeneas
+
+After invoking the Nix shell with `nix-shell`,
+
+```
+alias aeneas='../../../bin/aeneas'
+cd tests/src/betree
+aeneas -backend lean betree.llbc
+```
+
+The Lean file `Betree.lean` will be generated.
