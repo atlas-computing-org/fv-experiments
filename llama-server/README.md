@@ -1,7 +1,7 @@
-# Setup
+# Llama Server
 
 
-## AWS
+## Setup
 
 1. Create instance of `g5.xlarge` on AWS. Cost is about $1/hr. You may need to request quota increase for the number of vCPUs in on-demand G instances to 4.
    * Application and OS Images: Ubuntu Server 24.04 LTS, 64-bit (x86)
@@ -44,24 +44,19 @@
    ollama pull llama3
    ```
 
-5. Install LangChain.
+5. Install LangChain and StreamLit.
    ```
-   conda install langchain -c conda-forge
-   conda install langchain-nomic -c conda-forge
-   ```
-
-6. Install StreamLit.
-   ```
-   conda install streamlit -c conda-forge
+   conda install langchain langchain-community streamlit -c conda-forge
    ```
 
-7. Run the app in tmux session. (To return to tmux session, use `tmux a -t llama`.)
+6. Run the app in tmux session. (To return to tmux session, use `tmux a -t llama`.)
    ```
    tmux new -t llama
+   conda activate aifv
    streamlit run app.py
    ```
 
-8. View app from browser, by going to http://XXX.XXX.XXX.XXX:8501, where the XXXs form the server's public IP address.
+7. View app from browser, by going to http://XXX.XXX.XXX.XXX:8501, where the XXXs form the server's public IP address.
 
 ## Notes
 
