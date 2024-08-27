@@ -22,5 +22,6 @@
 ## References
 
 * https://gist.github.com/RobFisher/0d1e8bb008147a72c014c876051f9c5b 
+* https://discourse.nixos.org/t/installing-a-python-package-from-pypi/24553 
 
 

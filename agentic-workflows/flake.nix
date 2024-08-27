@@ -1,76 +1,79 @@
 {
   description = "Agentic";
 
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-24.05;
+  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-23.11;
 
   outputs = { self, nixpkgs }: 
     let
       pkgs = import nixpkgs { system = "x86_64-linux"; };
       
-      # Grab the latest version of LangChain from PyPi
-      format = "wheel";
-      dist = "py3";
-      python = "py3";
-      anthropic0 = pkgs.python3Packages.buildPythonPackage rec {
-        inherit format;
+      pypi-anthropic = pkgs.python3Packages.buildPythonPackage rec {
         pname = "anthropic";
         version = "0.34.1";
+        format = "pyproject";
+        doCheck = false;
         src = pkgs.python3Packages.fetchPypi {
-          inherit pname version format dist python;
-          hash = "sha256-L6JnEICdCWDZcPJs0L42hkNyUKSB7blcM9g3ql+iQVg=";
+          inherit pname version;
+          hash = "sha256-aegivXox7BHC7bhfIUfo8O4M/TKI/qcLDKiAiy+b+R0=";
         };
-      };
-      langchain0 = pkgs.python3Packages.buildPythonPackage rec {
-        inherit format;
-        pname = "langchain";
-        version = "0.2.14";
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version format dist python;
-          hash = "sha256-7tdhlO59nAgQN6PfeGjU3pDgQQtR/BypM6g3nkZL9Aw=";
-        };
-      };
-      langchain0-core = pkgs.python3Packages.buildPythonPackage rec {
-        inherit format;
-        pname = "langchain_core";
-        version = "0.2.34";
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version format dist python;
-          hash = "sha256-xP0VgnPijO91i07MyVa0JLdtS7kRfOYBSubrL7mFgB0=";
-        };
-      };
-      langsmith0 = pkgs.python3Packages.buildPythonPackage rec {
-        inherit format;
-        pname = "langsmith";
-        version = "0.1.104";
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version format dist python;
-          hash = "sha256-BJzTEpUqDbn17e7TuahhbmbvhuVJDINci7BUVpIDsNA=";
-        };
-      };
-      langchain0-anthropic = pkgs.python3Packages.buildPythonPackage rec {
-        inherit format;
-        pname = "langchain_anthropic";
-        version = "0.1.23";
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version format dist python;
-          hash = "sha256-icr9r0yeUiSEsMqLr8zrCl5P/KiffHyc7B4rpBEgggg=";
-        };
+        buildInputs = with pkgs.python3Packages; [ hatch-fancy-pypi-readme ];
       };
 
-      # Add dependencies of LangChain
+      pypi-langchain = pkgs.python3Packages.buildPythonPackage rec {
+        pname = "langchain";
+        version = "0.2.14";
+        format = "pyproject";
+        doCheck = false;
+        src = pkgs.python3Packages.fetchPypi {
+          inherit pname version;
+          hash = "sha256-3CqlpYiCBU+10EPDmrgzLr0FX4jxeDnaaOHH/QpP7+I=";
+        };
+        buildInputs = with pkgs.python3Packages; [ poetry-core ];
+      };
+
+      pypi-langchain-core = pkgs.python3Packages.buildPythonPackage rec {
+        pname = "langchain_core";
+        version = "0.2.34";
+        format = "pyproject";
+        doCheck = false;
+        src = pkgs.python3Packages.fetchPypi {
+          inherit pname version;
+          hash = "sha256-UASNkLF1wNWn4oFkYos8f4yCsNws12amY9NGoY1cnrI=";
+        };
+        buildInputs = with pkgs.python3Packages; [ poetry-core ];
+      };
+
+      pypi-langsmith = pkgs.python3Packages.buildPythonPackage rec {
+        pname = "langsmith";
+        version = "0.1.104";
+        format = "pyproject";
+        doCheck = false;
+        src = pkgs.python3Packages.fetchPypi {
+          inherit pname version;
+          hash = "sha256-eJLf5FLRQ/ulc9frKNv/MgLS8tqsq4xydv/kqFAXnU0=";
+        };
+        buildInputs = with pkgs.python3Packages; [ poetry-core ];
+      };
+
+      pypi-langchain-anthropic = pkgs.python3Packages.buildPythonPackage rec {
+        pname = "langchain_anthropic";
+        version = "0.1.23";
+        format = "pyproject";
+        doCheck = false;
+        src = pkgs.python3Packages.fetchPypi {
+          inherit pname version;
+          hash = "sha256-8s4EW9CuCdXxH+1LhKOM4waCK3vKx3IyNF9AEV32bVE=";
+        };
+        buildInputs = with pkgs.python3Packages; [ poetry-core ];
+      };
+
       pyPkgs = pythonPackages: with pythonPackages; [
         python-dotenv
-        orjson
-        jsonpatch
-        pydantic
-        httpx
-        distro
-        pyyaml
-        anthropic0
-        langsmith0
-        langchain0
-        langchain0-core
-        langchain0-anthropic
+        pypi-anthropic
+        pypi-langsmith
+        pypi-langchain
+        pypi-langchain-core
+        pypi-langchain-anthropic
       ];
     in 
     {
