@@ -2,7 +2,11 @@
 
 ## LangChain
 
-1. Install Nix.
+1. Install Nix and enable Nix flakes.
+   ```
+   sh <(curl -L https://nixos.org/nix/install) --daemon
+   mkdir -p ~/.config/nix && echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
+   ```
 
 2. Clone this repository.
 

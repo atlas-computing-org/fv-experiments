@@ -13,9 +13,9 @@ We will be using Nix for this. For example, `nix run nixpkgs#cargo init foo-bar`
    ```
    nix-channel --update; nix-env --install --attr nixpkgs.nix nixpkgs.cacert; systemctl daemon-reload; systemctl restart nix-daemon
    ```
-   To enable Nix flakes, add the following line to `~/.config/nix/nix.conf`.
+   To enable Nix flakes, 
    ```
-   experimental-features = nix-command flakes
+   mkdir -p ~/.config/nix && echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
    ```
 
 2. Clone the Aeneas project.
