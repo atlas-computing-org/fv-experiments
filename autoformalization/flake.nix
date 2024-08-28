@@ -1,5 +1,5 @@
 {
-  description = "Agentic Workflows";
+  description = "Autoformalization Demo";
 
   inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-23.11;
 
@@ -43,6 +43,18 @@
         buildInputs = with pkgs.python3Packages; [ poetry-core ];
       };
 
+      pypi-langchain-community = pkgs.python3Packages.buildPythonPackage rec {
+        pname = "langchain_community";
+        version = "0.2.12";
+        format = "pyproject";
+        doCheck = false;
+        src = pkgs.python3Packages.fetchPypi {
+          inherit pname version;
+          hash = "sha256-1nHPxqTztl9JouWatCDQFk8QnQpW/EtJllGCBcY7jH4=";
+        };
+        buildInputs = with pkgs.python3Packages; [ poetry-core ];
+      };
+
       pypi-langsmith = pkgs.python3Packages.buildPythonPackage rec {
         pname = "langsmith";
         version = "0.1.104";
@@ -69,10 +81,17 @@
 
       pyPkgs = pythonPackages: with pythonPackages; [
         python-dotenv
+        pydantic
+        httpx
+        distro
+        orjson
+        jsonpatch
+        pyyaml
         pypi-anthropic
         pypi-langsmith
         pypi-langchain
         pypi-langchain-core
+        pypi-langchain-community
         pypi-langchain-anthropic
       ];
     in 
