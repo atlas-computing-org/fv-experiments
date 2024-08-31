@@ -5,28 +5,20 @@
 We will be using Nix for this. For example, `nix run nixpkgs#cargo init foo-bar` is the equivalent of `cargo init foo-bar` for some pinned version of cargo in `nixpkgs`. The Nix commands may take a long time to initialize the first time you use them. They will be much faster on the next run.
 
 1. Install Nix and enable Nix flakes.
-   If Nix is not installed, run
    ```
-   sh <(curl -L https://nixos.org/nix/install) --daemon
-   ```
-   or if you already have Nix installed, upgrade it by running
-   ```
-   nix-channel --update; nix-env --install --attr nixpkgs.nix nixpkgs.cacert; systemctl daemon-reload; systemctl restart nix-daemon
-   ```
-   To enable Nix flakes, 
-   ```
+   sh <(curl -L https://nixos.org/nix/install) --daemon --yes
    mkdir -p ~/.config/nix && echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
    ```
 
-2. Clone the Aeneas project.
+2. Clone the Aeneas project, and navigate to the project folder.
    ```
-   git clone git@github.com:AeneasVerif/aeneas.git
+   git clone https://github.com/AeneasVerif/aeneas.git
+   cd aeneas
    ```
 
-3. Start the Nix shell. It uses the `shell.nix` config file in the Aeneas folder.
+3. Start the Nix shell. 
    ```
-   cd aeneas
-   nix-shell
+   nix develop
    ```
 
 4. Run the tests in the Nix shell.
@@ -41,7 +33,7 @@ We will be using Nix for this. For example, `nix run nixpkgs#cargo init foo-bar`
 
 ## Running Charon
 
-After invoking the Nix shell with `nix-shell`,
+After invoking the Nix shell with `nix develop`,
 
 ```
 alias charon = '../../../charon/bin/charon'
@@ -53,7 +45,7 @@ Can see the `charon` options in `aeneas/tests/src/betree/aeneas-test-options` un
 
 ## Running Aeneas
 
-After invoking the Nix shell with `nix-shell`,
+After invoking the Nix shell with `nix develop`,
 
 ```
 alias aeneas='../../../bin/aeneas'

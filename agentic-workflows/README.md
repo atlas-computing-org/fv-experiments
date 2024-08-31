@@ -2,9 +2,13 @@
 
 ## LangChain
 
-1. Install Nix.
+1. Install Nix and enable Nix flakes.
+   ```
+   sh <(curl -L https://nixos.org/nix/install) --daemon --yes
+   mkdir -p ~/.config/nix && echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
+   ```
 
-2. Clone this repository.
+2. Clone this repository, and navigate to the project folder.
 
 3. Sign up for Claude organizational account, get a basic/free plain and create an API key. Put the API key in the `.env` file. Check that the `.env` file is listed in the `.gitignore` file so the key does not get committed to the git repo.
 
