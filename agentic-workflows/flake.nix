@@ -5,85 +5,31 @@
 
   outputs = { self, nixpkgs }: 
     let
-      pkgs = import nixpkgs { system = "x86_64-linux"; };
-      
-      pypi-anthropic = pkgs.python3Packages.buildPythonPackage rec {
-        pname = "anthropic";
-        version = "0.34.1";
-        format = "pyproject";
-        doCheck = false;
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version;
-          hash = "sha256-aegivXox7BHC7bhfIUfo8O4M/TKI/qcLDKiAiy+b+R0=";
-        };
-        buildInputs = with pkgs.python3Packages; [ hatch-fancy-pypi-readme ];
-      };
 
-      pypi-langchain = pkgs.python3Packages.buildPythonPackage rec {
-        pname = "langchain";
-        version = "0.2.14";
-        format = "pyproject";
-        doCheck = false;
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version;
-          hash = "sha256-3CqlpYiCBU+10EPDmrgzLr0FX4jxeDnaaOHH/QpP7+I=";
-        };
-        buildInputs = with pkgs.python3Packages; [ poetry-core ];
-      };
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
 
-      pypi-langchain-core = pkgs.python3Packages.buildPythonPackage rec {
-        pname = "langchain_core";
-        version = "0.2.34";
-        format = "pyproject";
-        doCheck = false;
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version;
-          hash = "sha256-UASNkLF1wNWn4oFkYos8f4yCsNws12amY9NGoY1cnrI=";
-        };
-        buildInputs = with pkgs.python3Packages; [ poetry-core ];
-      };
+      my-anthropic = ps: ps.callPackage ../mods/anthropic.nix {};
+      my-langsmith = ps: ps.callPackage ../mods/langsmith.nix {};
+      my-langchain = ps: ps.callPackage ../mods/langchain.nix {};
+      my-langchain-anthropic = ps: ps.callPackage ../mods/langchain-anthropic.nix {};
+      my-langchain-core = ps: ps.callPackage ../mods/langchain-core.nix {};
 
-      pypi-langsmith = pkgs.python3Packages.buildPythonPackage rec {
-        pname = "langsmith";
-        version = "0.1.104";
-        format = "pyproject";
-        doCheck = false;
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version;
-          hash = "sha256-eJLf5FLRQ/ulc9frKNv/MgLS8tqsq4xydv/kqFAXnU0=";
-        };
-        buildInputs = with pkgs.python3Packages; [ poetry-core ];
-      };
-
-      pypi-langchain-anthropic = pkgs.python3Packages.buildPythonPackage rec {
-        pname = "langchain_anthropic";
-        version = "0.1.23";
-        format = "pyproject";
-        doCheck = false;
-        src = pkgs.python3Packages.fetchPypi {
-          inherit pname version;
-          hash = "sha256-8s4EW9CuCdXxH+1LhKOM4waCK3vKx3IyNF9AEV32bVE=";
-        };
-        buildInputs = with pkgs.python3Packages; [ poetry-core ];
-      };
-
-      pyPkgs = pythonPackages: with pythonPackages; [
+      py = ps: with ps; [
         python-dotenv
-        pypi-anthropic
-        pypi-langsmith
-        pypi-langchain
-        pypi-langchain-core
-        pypi-langchain-anthropic
+        (my-anthropic ps)
+        (my-langsmith ps)
+        (my-langchain ps)
+        (my-langchain-anthropic ps)
+        (my-langchain-core ps)
       ];
+
     in 
     {
-      devShells.x86_64-linux = {
-        default = pkgs.mkShell {
-          buildInputs = [
-            (pkgs.python3.withPackages pyPkgs)
-            pkgs.streamlit 
-          ];
-        };
+      devShells."${system}".default = pkgs.mkShell {
+        buildInputs = [ 
+          (pkgs.python3.withPackages py)
+        ];
       };
     };
 }
