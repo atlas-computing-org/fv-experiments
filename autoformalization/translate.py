@@ -19,7 +19,7 @@ parser = StrOutputParser()
 chain = prompt | model | parser
 
 # app title
-st.set_page_config(page_title="Autoformalization Demo", page_icon="🤖")
+# st.set_page_config(page_title="Autoformalization Demo", page_icon="🤖")
 st.title("🤖 Autoformalization Demo")
 
 st.header("Target Language")
