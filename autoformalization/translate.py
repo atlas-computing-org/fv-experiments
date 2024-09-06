@@ -1,9 +1,13 @@
-import dotenv
 import os
+import dotenv
+import tempfile
 import streamlit as st
+from subprocess import Popen, PIPE
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+
+codepath = tempfile.mkdtemp()+"/code.txt"
 
 # load language model
 dotenv.load_dotenv()
@@ -22,28 +26,47 @@ chain = prompt | model | parser
 # st.set_page_config(page_title="Autoformalization Demo", page_icon="🤖")
 st.title("🤖 Autoformalization Demo")
 
+st.header("Natural Language")
+st.text_area(
+    "Natural language statement",
+    label_visibility="collapsed",
+    placeholder="Statement that you want translated",
+    key="natural"
+)
+
 st.header("Target Language")
 st.selectbox(
     "Target formal language",
-    ("Dafny", "Frama-C", "Lean", "Coq", "Agda", "F-star", "Why3"),
+    ("Lean", "Frama-C", "Dafny", "Coq", "Agda", "F-star", "Why3"),
     label_visibility="collapsed",
     key="language"
 )
+resultbox = st.markdown("")
 
-col1, col2 = st.columns(2, gap="large")
+if st.session_state.language == "Lean":
+    st.header("Compiler Output")
+    outbox = st.text("")
 
-with col1:
-    st.header("Natural")
-    st.text_area(
-        "Natural language statement",
-        label_visibility="collapsed",
-        placeholder="Statement that you want translated",
-        key="natural"
-    )
+    st.header("Compiler Failures")
+    errbox = st.text("")
 
-with col2:
-    if st.session_state.language:
-        st.header(st.session_state.language)
-    if st.session_state.natural and st.session_state.language:
-        italian = st.markdown("Translating...")
-        italian.markdown(chain.invoke({"language": st.session_state.language, "text": st.session_state.natural}))
+if st.session_state.natural and st.session_state.language:
+    resultbox.markdown("Translating...")
+    result = chain.invoke({"language": st.session_state.language, "text": st.session_state.natural})
+    
+    if st.session_state.language == "Lean":
+        with open(codepath,"w") as codefile: 
+            codefile.write(result)
+        resultbox.markdown(result)
+        process = Popen(["lean",codepath], stdout=PIPE, stderr=PIPE)
+        stdout, stderr = process.communicate()
+        outmsg = stdout.decode("utf-8").strip().replace(codepath+":","")
+        errmsg = stderr.decode("utf-8").strip()
+        if outmsg:
+            outbox.text(outmsg)
+        else:
+            outbox.text("[None]")      
+        if errmsg:
+            errbox.text(errmsg)
+        else:
+            errbox.text("[None]")
