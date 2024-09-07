@@ -14,8 +14,7 @@ os.environ["ANTHROPIC_API_KEY"] = os.getenv("ANTHROPIC_API_KEY")
 model = ChatAnthropic(model="claude-3-5-sonnet-20240620")
 
 # app title
-# st.set_page_config(page_title="Atlas-Topos Chatbot", page_icon="🤖")
-st.title("🤖 Atlas-Topos Chatbot")
+st.title("💬 Atlas-Topos Chatbot")
 
 # app chat history
 msgs = StreamlitChatMessageHistory(key="langchain_messages")

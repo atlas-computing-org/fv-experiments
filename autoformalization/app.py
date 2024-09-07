@@ -1,9 +1,12 @@
 import streamlit as st
 
-st.set_page_config(page_title="Demos", page_icon=":material/edit:")
+st.set_page_config(page_title="Demos", page_icon="🤖")
 
-create_page = st.Page("translate.py", title="Autoformalization", icon=":material/add_circle:")
-delete_page = st.Page("chatbot.py", title="Chatbot", icon=":material/delete:")
+autoform = st.Page("autoform.py", title="Autoformalization", icon="📐")
+autoinform = st.Page("autoinform.py", title="Autoinformalization", icon="🖌️")
+interframe = st.Page("interframe.py", title="InterFramework", icon="🤝")
+chatbot = st.Page("chatbot.py", title="Chatbot", icon="💬")
+about = st.Page("about.py", title="About", icon="👉")
 
-pg = st.navigation([create_page, delete_page])
+pg = st.navigation([autoform, autoinform, interframe, chatbot, about])
 pg.run()

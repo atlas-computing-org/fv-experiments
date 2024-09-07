@@ -23,8 +23,7 @@ parser = StrOutputParser()
 chain = prompt | model | parser
 
 # app title
-# st.set_page_config(page_title="Autoformalization Demo", page_icon="🤖")
-st.title("🤖 Autoformalization Demo")
+st.title("📐 Autoformalization Demo")
 
 st.header("Natural Language")
 st.text_area(
@@ -53,11 +52,11 @@ if st.session_state.language == "Lean":
 if st.session_state.natural and st.session_state.language:
     resultbox.markdown("Translating...")
     result = chain.invoke({"language": st.session_state.language, "text": st.session_state.natural})
+    resultbox.markdown(result)
     
     if st.session_state.language == "Lean":
         with open(codepath,"w") as codefile: 
             codefile.write(result)
-        resultbox.markdown(result)
         process = Popen(["lean",codepath], stdout=PIPE, stderr=PIPE)
         stdout, stderr = process.communicate()
         outmsg = stdout.decode("utf-8").strip().replace(codepath+":","")
