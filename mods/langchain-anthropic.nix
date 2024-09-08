@@ -1,19 +1,25 @@
 { buildPythonPackage
 , fetchPypi
+, anthropic
+, defusedxml
+, langchain-core
 , poetry-core
 }:
 buildPythonPackage rec {
   pname = "langchain_anthropic";
-  version = "0.1.23";
+  version = "0.1.13";
   pyproject = true;
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8s4EW9CuCdXxH+1LhKOM4waCK3vKx3IyNF9AEV32bVE=";
+    hash = "sha256-MuesUeGHTEfhogST519b/Iiw/+r18a7WCRVH4a5Eu4U=";
   };
 
   nativeBuildInputs = [
+    anthropic
+    defusedxml
+    langchain-core
     poetry-core
   ];
 }
