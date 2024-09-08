@@ -1,0 +1,6 @@
+"Primes":
+  input: "Use sorry. There are infinitely many primes."
+  language: "Lean"
+"Fibonacci":
+  input: "Use sorry. Every fibonacci number is positive."
+  language: "Lean"

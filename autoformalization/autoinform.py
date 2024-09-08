@@ -23,7 +23,7 @@ parser = StrOutputParser()
 chain = prompt | model | parser
 
 # app title
-st.title("🖌️ Autoinformalization Demo")
+st.title("✏️ Autoinformalization Demo")
 
 st.header("Source Language")
 st.selectbox(
