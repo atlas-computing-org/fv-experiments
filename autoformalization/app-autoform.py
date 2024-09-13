@@ -25,7 +25,7 @@ language_options = ["Lean", "Frama-C", "Dafny", "Coq", "Agda", "F-star", "Why3"]
 
 # set up demo samples
 samples = {"(Load Example)": {"input": "", "language": language_options[0]}}
-with open("ex-autoinform.yaml") as stream:
+with open("./examples/ex-autoinform.yaml") as stream:
     try:
         samples.update(yaml.safe_load(stream))
     except yaml.YAMLError as exc:
