@@ -21,8 +21,10 @@ We will be using Nix for this. For example, `nix run nixpkgs#cargo init foo-bar`
    nix develop
    ```
 
-4. Run the tests in the Nix shell.
+4. Build Charon, build Aeneas, and run the tests in the Nix shell.
    ```
+   make setup-charon
+   make
    make test
    ```
 
@@ -36,21 +38,45 @@ We will be using Nix for this. For example, `nix run nixpkgs#cargo init foo-bar`
 After invoking the Nix shell with `nix develop`,
 
 ```
-alias charon = '../../../charon/bin/charon'
+alias charon='~/aeneas/charon/bin/charon'
 cd tests/src/betree
 charon --polonius --opaque=betree_utils
 ```
 
-Can see the `charon` options in `aeneas/tests/src/betree/aeneas-test-options` under `charon-args`.
+Options for `charon` can be found in `aeneas/tests/src/betree/aeneas-test-options` under `charon-args`.
 
 ## Running Aeneas
 
 After invoking the Nix shell with `nix develop`,
 
 ```
-alias aeneas='../../../bin/aeneas'
+alias aeneas='~/aeneas/bin/aeneas'
 cd tests/src/betree
 aeneas -backend lean betree.llbc
 ```
 
 The Lean file `Betree.lean` will be generated.
+
+## Adding Aeneas, Charon packages in Nix
+
+```
+{
+  inputs.aeneaspkgs.url = github:AeneasVerif/aeneas/e31b9a627463cd653b9aa8f59679f3eb2ca8cffd;
+
+  outputs = { self, aeneaspkgs, ... }: 
+    let
+
+      system = "x86_64-linux";
+      inherit (aeneaspkgs.packages.${system}) aeneas charon;
+
+    in 
+    {
+      devShells."${system}".default = pkgs.mkShell {
+        buildInputs = [ 
+          aeneas
+          charon
+        ];
+      };
+    };
+}
+```
