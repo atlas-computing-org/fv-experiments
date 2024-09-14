@@ -21,27 +21,16 @@ We will be using Nix for this. For example, `nix run nixpkgs#cargo init foo-bar`
    nix develop
    ```
 
-4. Build Charon, build Aeneas, and run the tests in the Nix shell.
-   ```
-   make setup-charon
-   make
-   make test
-   ```
-
-5. View the generated Lean files, e.g.
-   ```
-   aeneas/tests/lean/Betree/Funs.lean
-   ```
-
 ## Running Charon
 
 After invoking the Nix shell with `nix develop`,
 
 ```
-alias charon='~/aeneas/charon/bin/charon'
 cd tests/src/betree
 charon --polonius --opaque=betree_utils
 ```
+
+For single files and without `Cargo.toml`, use the `--input` and `--no-cargo` flags. See `charon --help` for more details.
 
 Options for `charon` can be found in `aeneas/tests/src/betree/aeneas-test-options` under `charon-args`.
 
@@ -50,7 +39,6 @@ Options for `charon` can be found in `aeneas/tests/src/betree/aeneas-test-option
 After invoking the Nix shell with `nix develop`,
 
 ```
-alias aeneas='~/aeneas/bin/aeneas'
 cd tests/src/betree
 aeneas -backend lean betree.llbc
 ```
