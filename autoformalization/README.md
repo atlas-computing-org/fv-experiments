@@ -24,7 +24,7 @@
 5. Run the app in tmux session. (To return to tmux session, use `tmux a -t llama`.)
    ```
    tmux new -t llama
-   conda activate aifv
+   nix develop
    streamlit run app.py
    ```
 

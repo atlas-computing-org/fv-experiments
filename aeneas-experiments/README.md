@@ -68,3 +68,35 @@ The Lean file `Betree.lean` will be generated.
     };
 }
 ```
+
+## Other ways of installing Aeneas, Charon
+
+### Install from source without nix
+
+Follow the install instructions on https://github.com/AeneasVerif/aeneas . 
+
+Do ensure that Opam is the latest version, which you can install through the binary distribution rather than through your system's package manager.
+```
+bash -c "sh <(curl -fsSL https://opam.ocaml.org/install.sh)"
+```
+
+### Quick run using nix
+
+```
+nix run github:aeneasverif/aeneas#charon -L
+nix run github:aeneasverif/aeneas -L -- -backend your_preferred_backend your_llbc.file
+```
+
+For example, 
+```
+cd aeneas/tests/src/betree
+nix run github:aeneasverif/aeneas#charon -- --polonius --opaque=betree_utils
+```
+
+You may get a lot of warnings but the llbc file will be computed.
+
+## Nix shell with aeneas and charon
+
+```
+nix shell github:aeneasverif/aeneas github:aeneasverif/aeneas#charon
+```

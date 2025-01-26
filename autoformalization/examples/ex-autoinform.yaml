@@ -4,3 +4,6 @@
 "Fibonacci":
   input: "Use sorry. Every fibonacci number is positive."
   language: "Lean"
+"Price":
+  input: "The price should be constant."
+  language: "Lean"
